@@ -1801,7 +1801,6 @@ const commitFile = async () => {
   await exec("git", ["push"]);
 };
 
-
 /**
  * Returns a URL in markdown format for PR's and issues
  * @param {Object | String} item - holds information concerning the issue/PR
@@ -1819,16 +1818,19 @@ const toUrlFormat = (item) => {
 };
 
 const handleCreateEvent = (item) => {
-  if (item.payload && item.payload.ref_type == 'repository') {
-    return `👨‍💻 Created new Repository ${toUrlFormat(item.repo.name)}`
+  if (item.payload && item.payload.ref_type == "repository") {
+    return `👨‍💻 Created new Repository ${toUrlFormat(item.repo.name)}`;
+  } else if (item.payload && item.payload.ref_type == "branch") {
+    return `🎋 Created new Branch ${
+      item.payload.ref
+    } in repository ${toUrlFormat(item.repo.name)}`;
   }
-  else if (item.payload && item.payload.ref_type == 'branch') {
-    return `🎋 Created new Branch ${item.payload.ref} in repository ${toUrlFormat(item.repo.name)}`
-  }
-}
+};
 const handleForkEvent = (item) => {
-  return `🍴 Forked ${toUrlFormat(item.repo.name)} to ${toUrlFormat(item.payload.forkee.full_name)}`
-}
+  return `🍴 Forked ${toUrlFormat(item.repo.name)} to ${toUrlFormat(
+    item.payload.forkee.full_name
+  )}`;
+};
 const serializers = {
   IssueCommentEvent: (item) => {
     return `🗣 Commented on ${toUrlFormat(item)} in ${toUrlFormat(
@@ -1836,7 +1838,9 @@ const serializers = {
     )}`;
   },
   PushEvent: (item) => {
-    return `🚚 Pushed changed  in ${toUrlFormat(item.repo.name)} on ${item.created_at.slice(0, 10)}`;
+    return `🚚 Pushed changed  in ${toUrlFormat(
+      item.repo.name
+    )} on ${item.created_at.slice(0, 10)}`;
   },
   CreateEvent: (item) => {
     return handleCreateEvent(item);
@@ -1867,7 +1871,7 @@ Toolkit.run(
       per_page: 100,
     });
     tools.log.debug(
-      `Activity for ${GH_USERNAME}, ${events.data} events found.`
+      `Activity for ${GH_USERNAME}, ${events.data.length} events found. MAX_LINES ${MAX_LINES}`
     );
 
     const content = events.data
@@ -1908,9 +1912,10 @@ Toolkit.run(
     if (startIdx !== -1 && endIdx === -1) {
       // Add one since the content needs to be inserted just after the initial comment
       startIdx++;
-      content.forEach((line, idx) =>
-        readmeContent.splice(startIdx + idx, 0, `${idx + 1}. ${line}`)
-      );
+      content.forEach((line, idx) => {
+        tools.log.info(`Adding  ${idx + 1}. ${line}`);
+        readmeContent.splice(startIdx + idx, 0, `${idx + 1}. ${line}`);
+      });
 
       // Append <!--END_SECTION:activity--> comment
       readmeContent.splice(

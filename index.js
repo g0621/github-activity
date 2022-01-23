@@ -135,7 +135,7 @@ Toolkit.run(
       per_page: 100,
     });
     tools.log.debug(
-      `Activity for ${GH_USERNAME}, ${events.data} events found.`
+      `Activity for ${GH_USERNAME}, ${events.data.length} events found. MAX_LINES ${MAX_LINES}`
     );
 
     const content = events.data
@@ -176,9 +176,10 @@ Toolkit.run(
     if (startIdx !== -1 && endIdx === -1) {
       // Add one since the content needs to be inserted just after the initial comment
       startIdx++;
-      content.forEach((line, idx) =>
-        readmeContent.splice(startIdx + idx, 0, `${idx + 1}. ${line}`)
-      );
+      content.forEach((line, idx) => {
+        tools.log.info(`Adding  ${idx + 1}. ${line}`);
+        readmeContent.splice(startIdx + idx, 0, `${idx + 1}. ${line}`);
+      });
 
       // Append <!--END_SECTION:activity--> comment
       readmeContent.splice(
