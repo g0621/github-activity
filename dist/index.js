@@ -1886,7 +1886,7 @@ Toolkit.run(
 
     // Find the index corresponding to <!--START_SECTION:activity--> comment
     let startIdx = readmeContent.findIndex(
-      (content) => content.trim() === "<!--START_SECTION:activity-->"
+      (line) => line.trim() === "<!--START_SECTION:activity-->"
     );
 
     // Early return in case the <!--START_SECTION:activity--> comment was not found
@@ -1898,7 +1898,7 @@ Toolkit.run(
 
     // Find the index corresponding to <!--END_SECTION:activity--> comment
     const endIdx = readmeContent.findIndex(
-      (content) => content.trim() === "<!--END_SECTION:activity-->"
+      (line) => line.trim() === "<!--END_SECTION:activity-->"
     );
 
     if (!content.length) {
@@ -1908,6 +1908,10 @@ Toolkit.run(
     if (content.length < 5) {
       tools.log.info("Found less than 5 activities");
     }
+
+    tools.log.debug(
+      `start idx for ${startIdx}, end idx ${endIdx} content length ${content.length}`
+    );
 
     if (startIdx !== -1 && endIdx === -1) {
       // Add one since the content needs to be inserted just after the initial comment
