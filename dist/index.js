@@ -1744,6 +1744,7 @@ const { Toolkit } = __webpack_require__(461);
 const GH_USERNAME = core.getInput("GH_USERNAME");
 const COMMIT_MSG = core.getInput("COMMIT_MSG");
 const MAX_LINES = core.getInput("MAX_LINES");
+
 /**
  * Returns the sentence case representation
  * @param {String} str - the string
@@ -1754,22 +1755,6 @@ const MAX_LINES = core.getInput("MAX_LINES");
 const capitalize = (str) => str.slice(0, 1).toUpperCase() + str.slice(1);
 
 const urlPrefix = "https://github.com";
-
-/**
- * Returns a URL in markdown format for PR's and issues
- * @param {Object | String} item - holds information concerning the issue/PR
- *
- * @returns {String}
- */
-
-const toUrlFormat = (item) => {
-  if (typeof item === "object") {
-    return Object.hasOwnProperty.call(item.payload, "issue")
-      ? `[#${item.payload.issue.number}](${urlPrefix}/${item.repo.name}/issues/${item.payload.issue.number})`
-      : `[#${item.payload.pull_request.number}](${urlPrefix}/${item.repo.name}/pull/${item.payload.pull_request.number})`;
-  }
-  return `[${item}](${urlPrefix}/${item})`;
-};
 
 /**
  * Execute shell command
@@ -1816,11 +1801,48 @@ const commitFile = async () => {
   await exec("git", ["push"]);
 };
 
+
+/**
+ * Returns a URL in markdown format for PR's and issues
+ * @param {Object | String} item - holds information concerning the issue/PR
+ *
+ * @returns {String}
+ */
+
+const toUrlFormat = (item) => {
+  if (typeof item === "object") {
+    return Object.hasOwnProperty.call(item.payload, "issue")
+      ? `[#${item.payload.issue.number}](${urlPrefix}/${item.repo.name}/issues/${item.payload.issue.number})`
+      : `[#${item.payload.pull_request.number}](${urlPrefix}/${item.repo.name}/pull/${item.payload.pull_request.number})`;
+  }
+  return `[${item}](${urlPrefix}/${item})`;
+};
+
+const handleCreateEvent = (item) => {
+  if (item.payload && item.payload.ref_type == 'repository') {
+    return `👨‍💻 Created new Repository ${toUrlFormat(item.repo.name)}`
+  }
+  else if (item.payload && item.payload.ref_type == 'branch') {
+    return `🎋 Created new Branch ${item.payload.ref} in repository ${toUrlFormat(item.repo.name)}`
+  }
+}
+const handleForkEvent = (item) => {
+  return `🍴 Forked ${toUrlFormat(item.repo.name)} to ${toUrlFormat(item.payload.forkee.full_name)}`
+}
 const serializers = {
   IssueCommentEvent: (item) => {
     return `🗣 Commented on ${toUrlFormat(item)} in ${toUrlFormat(
       item.repo.name
     )}`;
+  },
+  PushEvent: (item) => {
+    return `🚚 Pushed changed  in ${toUrlFormat(item.repo.name)} on ${item.created_at.slice(0, 10)}`;
+  },
+  CreateEvent: (item) => {
+    return handleCreateEvent(item);
+  },
+  ForkEvent: (item) => {
+    return handleForkEvent(item);
   },
   IssuesEvent: (item) => {
     return `❗️ ${capitalize(item.payload.action)} issue ${toUrlFormat(
