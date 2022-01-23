@@ -1838,9 +1838,9 @@ const serializers = {
     )}`;
   },
   PushEvent: (item) => {
-    return `🚚 Pushed changed  in ${toUrlFormat(
+    return `🚚 Pushed ${item.payload.size} commits in ${toUrlFormat(
       item.repo.name
-    )} on ${item.created_at.slice(0, 10)}`;
+    )}`;
   },
   CreateEvent: (item) => {
     return handleCreateEvent(item);
