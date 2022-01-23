@@ -1,0 +1,22 @@
+{
+  "name": "github-activity",
+  "version": "0.1.1",
+  "description": "Updates README with the recent GitHub activity of a user",
+  "main": "index.js",
+  "keywords": [],
+  "author": "Gyan Vardhan",
+  "license": "MIT",
+  "scripts": {
+    "format:check": "prettier --check index.js",
+    "format": "prettier --write index.js",
+    "build": "ncc build index.js -o dist"
+  },
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "actions-toolkit": "^6.0.1"
+  },
+  "devDependencies": {
+    "@zeit/ncc": "^0.22.3",
+    "prettier": "^2.5.1"
+  }
+}
