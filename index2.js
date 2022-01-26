@@ -91,7 +91,7 @@ const toUrlFormat = (item, branch, public = true) => {
 
 
 const actionIcon = (name, alt) =>
-    `<img alt="${alt}" src="https://github.com/cheesits456/github-activity-readme/raw/master/icons/${name}.png" align="top" height="18">`;
+    `<img alt="${alt}" src="https://github.com/g0621/github-activity/raw/master/icons/${name}.png" align="top" height="18">`;
 
 const timestamper = item =>
     `\`[${item.created_at.split("T")[0].split("-").slice(1, 3).join("/")} ${item.created_at
