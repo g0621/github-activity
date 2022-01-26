@@ -214,6 +214,8 @@ Toolkit.run(
                 else arr.push(data);
             }
         }
+        MAX_LINES = parseInt(MAX_LINES)
+        MAX_LINES2 = parseInt(MAX_LINES2)
 
         const content = arr
             .filter(event => {
@@ -248,7 +250,7 @@ Toolkit.run(
         }
 
         readmeContent.splice(startIdx + 1, endIdx - startIdx);
-        
+        tools.log.debug(`MAX_LINES ${MAX_LINES} MAX_LINES2 ${MAX_LINES2}`)
         if (startIdx !== -1) {
             // Add one since the content needs to be inserted just after the initial comment
             startIdx++;
