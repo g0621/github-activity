@@ -19,7 +19,7 @@ let MAX_LINES2 = core.getInput("MAX_LINES2")
 
 const capitalize = (str) => str.slice(0, 1).toUpperCase() + str.slice(1);
 
-const urlPrefix = "https://github.com";
+const urlPrefix = "https://github.com/";
 
 /**
  * Execute shell command
