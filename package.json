@@ -8,8 +8,8 @@
   "license": "MIT",
   "scripts": {
     "format:check": "prettier --check index.js",
-    "pre:build": "prettier --write index.js",
-    "build": "ncc build index.js -o dist"
+    "pre:build": "prettier --write index2.js",
+    "build": "ncc build index2.js -o dist"
   },
   "dependencies": {
     "@actions/core": "^1.6.0",

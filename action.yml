@@ -12,6 +12,10 @@ inputs:
     default: ":zap: Update README with the recent activity"
     required: false
   MAX_LINES:
+    description: "The maximum number of lines before details"
+    default: 5
+    required: false
+  MAX_LINES2:
     description: "The maximum number of lines populated in your readme file"
     default: 10
     required: false
